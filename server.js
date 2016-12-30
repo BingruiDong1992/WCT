@@ -12,7 +12,6 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/wctLogin');
 var db = mongoose.connection;
 
-
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -20,9 +19,13 @@ var server = require('socket.io');
 var pty = require('pty.js');
 var route = require('./routes/route');
 var users = require('./routes/users');
-var term = null;
 var httpserv;
 var app = express();
+
+var Terminal = require('./models/terminal')
+
+var userId = null;
+var termMap = {};
 
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({defaultLayout:'layout'}));
@@ -73,7 +76,11 @@ app.use(function (req, res, next) {
     next();
 });
 
-//app.use('/', express.static(path.join(__dirname, 'node_modules')));
+app.get('/:id', function(req, res, next) {
+    userId = req.params.id;
+    next();
+});
+
 app.use('/', route);
 app.use('/users', users);
 
@@ -91,13 +98,24 @@ var sshauth = 'password';
 var io = server.listen(httpserv,{path: '/wct/socket.io'});
 io.sockets.on('connection', function(socket){
     var sshuser = '';
-
-    if (term == null) {
+    var term;
+    var terminal;
+    if (userId in termMap) {
+        terminal = termMap[userId];
+        term = terminal.term;
+        terminal.addUser(userId);
+        console.log(terminal.online_user_count);
+        console.log("Existing termianl for " + userId);
+    }
+    else {
         term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
         });
+        terminal = new Terminal(userId, term);
+        termMap[userId] = terminal;
+        console.log("new termianl for " + userId);
     }
 
     console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser);
@@ -114,6 +132,12 @@ io.sockets.on('connection', function(socket){
         term.write(data);
     });
     socket.on('disconnect', function() {
-        //term.end();
+        terminal.removeUser(userId);
+        console.log(terminal.online_user_count);
+        if (terminal.online_user_count == 0) {
+            term.end();
+            console.log("End terminal created by " + termMap[terminal.creater]);
+            delete termMap[terminal.creater];
+        }
     });
 });

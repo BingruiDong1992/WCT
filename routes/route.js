@@ -1,13 +1,19 @@
 var express = require('express');
 var path = require('path');
 var router = express.Router();
+var termId;
 
 router.get('/', function(req, res) {
     res.render('index');
 });
 
 router.get('/wct', ensureAuthenticated, function(req, res) {
-    res.sendFile(path.resolve('views/wct.html'));
+    //res.render(path.resolve('views/wct.handlebars'));
+    res.render('wct', {layout: false});
+});
+
+router.get('/:id', function(req, res) {
+    res.render('wct', {layout: false});
 });
 
 function ensureAuthenticated(req, res, next) {

@@ -1,5 +1,5 @@
 var browserTerminal;
-var socket = io(location.origin, {path: '/wct/socket.io'})
+var socket = io(location.origin, {path: '/wct/socket.io'}, {query: 'name=something'});
 var buf = '';
 
 function Wct(argv) {
