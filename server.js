@@ -23,7 +23,7 @@ var httpserv;
 var app = express();
 
 var Terminal = require('./models/terminal')
-
+var user = null;
 var userId = null;
 var termMap = {};
 
@@ -73,10 +73,11 @@ app.use(function (req, res, next) {
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
     res.locals.user = req.user || null;
+    user = req.user || null;
     next();
 });
 
-app.get('/:id', function(req, res, next) {
+app.get('/wcts/:id', function(req, res, next) {
     userId = req.params.id;
     next();
 });
@@ -136,7 +137,7 @@ io.sockets.on('connection', function(socket){
         console.log(terminal.online_user_count);
         if (terminal.online_user_count == 0) {
             term.end();
-            console.log("End terminal created by " + termMap[terminal.creater]);
+            console.log("End terminal created by " + terminal.creater);
             delete termMap[terminal.creater];
         }
     });

@@ -7,12 +7,12 @@ router.get('/', function(req, res) {
     res.render('index');
 });
 
-router.get('/wct', ensureAuthenticated, function(req, res) {
-    //res.render(path.resolve('views/wct.handlebars'));
-    res.render('wct', {layout: false});
-});
+// router.get('/wct', ensureAuthenticated, function(req, res) {
+//     //res.render(path.resolve('views/wct.handlebars'));
+//     res.render('wct', {layout: false});
+// });
 
-router.get('/:id', function(req, res) {
+router.get('/wcts/:id', ensureAuthenticated, function(req, res) {
     res.render('wct', {layout: false});
 });
 

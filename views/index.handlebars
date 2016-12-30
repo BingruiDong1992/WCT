@@ -2,7 +2,13 @@
     <div class="jumbotron">
         <h1>Web Cooperate Terminal</h1>
         <p class="lead">A new way to Team Work!</p>
-        <p><a class="btn btn-lg btn-success" href="/wct" role="button">Cooperate Treminal</a></p>
+
+        {{#if user}}
+            <p><a class="btn btn-lg btn-success" href="/wcts/{{{user.id}}}" role="button">Cooperate Treminal</a></p>
+        {{else}}
+            <p><a class="btn btn-lg btn-success" href="/users/login" role="button">Cooperate Treminal</a></p>
+        {{/if}}
+
     </div>
 
     <div class="row marketing">

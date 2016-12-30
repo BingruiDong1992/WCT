@@ -8,10 +8,10 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
           crossorigin="anonymous">
-    <script src="wct/hterm_all.js"></script>
-    <script src="wct/socket.io/socket.io.js"></script>
-    <script src="wct/wct.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <script src="../wct/hterm_all.js"></script>
+    <script src="../wct/socket.io/socket.io.js"></script>
+    <script src="../wct/wct.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
     <style>
         html,
         body {
@@ -48,7 +48,9 @@
 
 <body ng-controller="chatCtrl as chat">
     <div class="row well">
-        <h4>{{{user.name}}}</h4>
+        <h4>{{{user.name}}}
+            {{{user.id}}}
+        </h4>
 
     </div>
     <div id="terminal" ng-class="chat.getTerminalClass()"></div>
@@ -107,8 +109,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
     <!-- Our application scripts -->
-    <script src="wct/angularJS/wctApp.js"></script>
-    <script src="wct/angularJS/controllers/chat.js"></script>
+    <script src="../wct/angularJS/wctApp.js"></script>
+    <script src="../wct/angularJS/controllers/chat.js"></script>
 </body>
 
 </html>
